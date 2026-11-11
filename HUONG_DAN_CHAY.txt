@@ -1,0 +1,23 @@
+HUONG DAN CHAY PHIEN BAN GIAO DIEN HTML
+
+1. Cai Python 3.10 tro len.
+2. Giai nen ZIP va mo thu muc DO_AN_GRADIENT_DESCENT_HTML bang VS Code.
+3. Mo Terminal tai thu muc nay.
+4. Cai Flask bang lenh:
+   python -m pip install -r requirements.txt
+5. Khoi dong web:
+   python app.py
+6. Mo trinh duyet va truy cap:
+   http://127.0.0.1:5000
+
+CAU TRUC
+- app.py: backend Flask, doc du lieu va xu ly yeu cau web.
+- gradient.py: cong thuc va thuat toan Gradient Descent.
+- templates/index.html: cau truc giao dien HTML.
+- static/style.css: dinh dang giao dien CSS.
+- static/script.js: xu ly nut du doan tren trinh duyet.
+- du_lieu_gia_nha.csv: du lieu minh hoa.
+
+LUU Y
+Du lieu CSV la du lieu minh hoa tu tao, khong phai du lieu giao dich thuc te.
+De dung may chu, nhan Ctrl+C trong Terminal.

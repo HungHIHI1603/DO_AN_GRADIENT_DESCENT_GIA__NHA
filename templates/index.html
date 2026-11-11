@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>HomeGrad | Dự đoán giá nhà</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="app-shell">
+        <aside class="sidebar">
+            <div class="brand">
+                <div class="brand-mark">H</div>
+                <div><strong>HomeGrad</strong><span>OPTIMIZATION LAB</span></div>
+            </div>
+            <div class="side-label">KHÔNG GIAN LÀM VIỆC</div>
+            <a class="side-link active" href="/"><span class="side-icon">⌂</span> Dự đoán giá nhà</a>
+            <div class="side-label second">THUẬT TOÁN</div>
+            <div class="algorithm-card">
+                <div class="algorithm-icon">∇</div>
+                <div><strong>Gradient Descent</strong><small>Tối ưu bậc nhất</small></div>
+                <span class="live-dot"></span>
+            </div>
+            <div class="sidebar-bottom">
+                <div class="profile-avatar">SV</div>
+                <div><strong>Đồ án học phần</strong><small>Nhập môn tối ưu hóa</small></div>
+            </div>
+        </aside>
+
+        <main class="main">
+            <header class="topbar">
+                <div class="breadcrumb">Ứng dụng <span>/</span> <b>Dự đoán giá nhà</b></div>
+                <div class="top-status"><i></i> Mô hình sẵn sàng</div>
+            </header>
+
+            <section class="page-heading">
+                <div>
+                    <div class="eyebrow">ỨNG DỤNG TỐI ƯU HÓA BẬC NHẤT</div>
+                    <h1>Dự đoán giá nhà</h1>
+                    <p>Sử dụng hồi quy tuyến tính và Gradient Descent để tìm bộ tham số phù hợp từ dữ liệu diện tích và giá nhà.</p>
+                </div>
+                <div class="heading-symbol">⌂</div>
+            </section>
+
+            {% if loi %}
+            <div class="alert">{{ loi }}</div>
+            {% endif %}
+
+            <section class="metrics">
+                <article class="metric-card">
+                    <div class="metric-top"><span>Dữ liệu huấn luyện</span><span class="metric-icon blue">▦</span></div>
+                    <div class="metric-value">{{ thong_tin.so_mau if thong_tin else "—" }} <small>mẫu</small></div>
+                    <div class="metric-note">Số dòng trong tệp CSV</div>
+                </article>
+                <article class="metric-card">
+                    <div class="metric-top"><span>Vòng lặp tối ưu</span><span class="metric-icon purple">↻</span></div>
+                    <div class="metric-value">{{ thong_tin.so_vong_lap if thong_tin else "—" }}</div>
+                    <div class="metric-note">Số lần cập nhật tham số</div>
+                </article>
+                <article class="metric-card">
+                    <div class="metric-top"><span>Learning rate</span><span class="metric-icon orange">α</span></div>
+                    <div class="metric-value">{{ thong_tin.alpha if thong_tin else "—" }}</div>
+                    <div class="metric-note">Tốc độ học được thiết lập</div>
+                </article>
+                <article class="metric-card">
+                    <div class="metric-top"><span>Hàm mục tiêu cuối</span><span class="metric-icon green">⌁</span></div>
+                    <div class="metric-value compact">{{ "%.4f"|format(thong_tin.loss) if thong_tin else "—" }}</div>
+                    <div class="metric-note">Giá trị J sau tối ưu</div>
+                </article>
+            </section>
+
+            <section class="content-grid">
+                <article class="panel prediction-panel">
+                    <div class="panel-heading">
+                        <div><div class="panel-kicker">CÔNG CỤ DỰ ĐOÁN</div><h2>Thử một căn nhà</h2></div>
+                        <span class="pill">Mô hình tuyến tính</span>
+                    </div>
+                    <p class="panel-description">Nhập diện tích căn nhà. Hệ thống sẽ sử dụng tham số đã được tối ưu bằng Gradient Descent để ước lượng giá.</p>
+                    <form id="prediction-form">
+                        <label for="area">Diện tích căn nhà</label>
+                        <div class="input-wrap"><input id="area" name="dien_tich" type="number" min="0.1" step="0.1" value="50" required><span>m²</span></div>
+                        <div class="input-hint">Ví dụ: 50 m², 75 m² hoặc 100 m²</div>
+                        <button id="predict-button" type="submit"><span>Chạy dự đoán</span><b>→</b></button>
+                    </form>
+                    <div class="result-box" id="result-box">
+                        <div class="result-placeholder"><div class="placeholder-icon">⌂</div><strong>Kết quả sẽ hiển thị tại đây</strong><span>Nhập diện tích và nhấn “Chạy dự đoán”.</span></div>
+                    </div>
+                    <div class="data-note"><span>i</span><p>Dữ liệu hiện tại là dữ liệu minh họa tự tạo để kiểm thử thuật toán, không phải dữ liệu giao dịch nhà đất thực tế.</p></div>
+                </article>
+
+                <article class="panel method-panel">
+                    <div class="panel-heading"><div><div class="panel-kicker">PHƯƠNG PHÁP TỐI ƯU</div><h2>Gradient Descent</h2></div><div class="gd-symbol">∇</div></div>
+                    <p class="panel-description">Thuật toán cập nhật tham số theo hướng ngược với gradient để làm giảm hàm mục tiêu.</p>
+                    <div class="formula-card">
+                        <span>CÔNG THỨC CẬP NHẬT</span>
+                        <div>θ = θ − α∇J(θ)</div>
+                    </div>
+                    <div class="steps">
+                        <div class="step"><span>01</span><div><strong>Khởi tạo tham số</strong><small>Chọn θ₀, θ₁ ban đầu.</small></div></div>
+                        <div class="step"><span>02</span><div><strong>Tính gradient</strong><small>Tính đạo hàm riêng của J.</small></div></div>
+                        <div class="step"><span>03</span><div><strong>Cập nhật tham số</strong><small>Đi theo hướng ngược gradient.</small></div></div>
+                        <div class="step"><span>04</span><div><strong>Kiểm tra hội tụ</strong><small>Dừng khi thay đổi J đủ nhỏ.</small></div></div>
+                    </div>
+                    <div class="model-equation"><span>MÔ HÌNH DỰ ĐOÁN</span><strong>ŷ = θ₁x + θ₀</strong></div>
+                </article>
+            </section>
+
+            <footer class="footer"><span>HOMEGRAD · ĐỒ ÁN NHẬP MÔN TỐI ƯU HÓA</span><span>Gradient Descent · Hồi quy tuyến tính</span></footer>
+        </main>
+    </div>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
+</body>
+</html>
